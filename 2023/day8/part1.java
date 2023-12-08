@@ -16,17 +16,42 @@ public class part1{
       String path = args[0];
       File input = new File(path);
       Scanner reader = new Scanner(input);
-      Map<String, Node> scores = new HashMap<>();
+      Map<String, Node> pointsMap = new HashMap<>();
       int sum = 0;
       
       String instructions = reader.nextLine();
+      String empty = reader.nextLine();
 
       while(reader.hasNextLine()){
         String line = reader.nextLine();
+        line = line.replaceAll(",", "");
+        line = line.replaceAll("\\(", "");
+        line = line.replaceAll("\\)", "");
+        line = line.replaceAll("=", "");
+        line = line.replaceAll(" +", " ");
         String[] words = line.split(" ");
         String content = words[0];
-        int bet = Integer.valueOf(words[1]);
+        String leftNode = words[1];
+        String rightNode = words[2];
 
+        Node node = new Node(content, leftNode, rightNode);
+        pointsMap.put(content, node);
+      }
+
+      String position = "AAA";
+      int instructionIndex = -1;
+      while(!position.equals("ZZZ")){
+        sum++;
+        instructionIndex++;
+        if(instructionIndex >= instructions.length()){
+          instructionIndex = 0;
+        }
+        if(instructions.charAt(instructionIndex) == 'R'){
+          position = pointsMap.get(position).getRight();
+        }
+        else{
+          position = pointsMap.get(position).getLeft();
+        }
       }
 
       System.out.println(sum);
@@ -36,11 +61,5 @@ public class part1{
       e.printStackTrace();
     }
   }
-}
-
-public class Node{
-  private String content;
-  private Node leftNode;
-  private Node rightNode;
 }
 
