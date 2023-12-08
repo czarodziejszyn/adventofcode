@@ -69,7 +69,7 @@ func main(){
                 if(indx==len(path)){
                     indx=0
                 }
-                fmt.Println(curr, string(path[indx]))
+                //fmt.Println(curr, string(path[indx]))
 
                 if(curr[len(curr)-1]=='Z'){
                     break
@@ -86,9 +86,9 @@ func main(){
             }
             nwds = append(nwds, wynik)
         }
-        fmt.Println(wynik)
+        //fmt.Println(wynik)
     }
-    fmt.Println("nwds: ",nwds)
+    //fmt.Println("nwds: ",nwds)
 
     var curr uint64=nwds[1]*nwds[0]/(nwd(nwds[1],nwds[0]))
     for i:=2;i<len(nwds);i++{
@@ -96,7 +96,7 @@ func main(){
     }
 
     fmt.Println(curr)
-    // fmt.Println(nwd(45, 95))
+    // //fmt.Println(nwd(45, 95))
     
     
 
