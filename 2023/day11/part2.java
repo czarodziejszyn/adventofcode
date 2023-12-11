@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class part2{
   public static void main(String[] args){
@@ -11,34 +12,67 @@ public class part2{
       String path = args[0];
       File input = new File(path);
       Scanner reader = new Scanner(input);
-      int sum = 0;
-      int r, g, b;
+      ArrayList<ArrayList<Character>> galaxies = new ArrayList<>();
+      ArrayList<Node> points = new ArrayList<>();
+      int hashCounter = 0;
+      int x = -1;
+      Long sum = 0L;
 
       while(reader.hasNextLine()){
+      	x++;
         String line = reader.nextLine();
-        String[] list = line.split(" ");
-        r = 0;
-        g = 0;
-        b = 0;
+      	ArrayList<Character> charLine = new ArrayList<>();
+	      for(int i = 0; i < line.length(); i++){
+	        if(line.charAt(i) == '#'){
+	          Node node = new Node(x, i);
+            points.add(node);
+	        }	    
+	        charLine.add(line.charAt(i));
+	      }
+	      galaxies.add(charLine);
+      }
 
-        for(int i = 3; i < list.length; i++){
-          if(list[i].indexOf("red") >= 0){
-            if(Integer.valueOf(list[i-1]) > r){
-              r = Integer.valueOf(list[i-1]);
+      for(int i = galaxies.size()-1; i > 0; i--){
+	      hashCounter = 0;
+	      for(int j = 0; j  < galaxies.get(i).size(); j++){
+	        if(galaxies.get(i).get(j) == '#'){
+	          hashCounter++;
+	          break;
+	        }
+        }
+	      if(hashCounter == 0){
+    	     for(int j = 0; j < points.size(); j++){
+            if(points.get(j).x > i){
+              Node node = points.get(j);
+              node.x+=999999;
             }
+          } 
+	      }
+	    }
+
+      for(int i = galaxies.get(0).size()-1; i >= 0; i--){
+        hashCounter = 0;
+        for(int j = 0; j < galaxies.size(); j++){
+          if(galaxies.get(j).get(i) == '#'){
+            hashCounter++;
+            break;
           }
-          else if(list[i].indexOf("green") >= 0){
-            if(Integer.valueOf(list[i-1]) > g){
-              g = Integer.valueOf(list[i-1]);
-            }
-          }
-          else if(list[i].indexOf("blue") >= 0){
-            if(Integer.valueOf(list[i-1]) > b){
-              b = Integer.valueOf(list[i-1]);
+        }
+        if(hashCounter == 0){
+          for(int j = 0; j < points.size(); j++){
+            if(points.get(j).y > i){
+              Node node = points.get(j);
+              node.y+=999999;
             }
           }
         }
-        sum += (r * g * b); 
+      }
+
+      for(int i = 0; i < points.size(); i++){
+        for(int j = i; j < points.size(); j++){
+          sum += (long)Math.abs(points.get(i).x-points.get(j).x);
+          sum += (long)Math.abs(points.get(i).y-points.get(j).y);
+        }
       }
 
       System.out.println(sum);
@@ -47,5 +81,14 @@ public class part2{
       System.out.println("Dupa\n");
       e.printStackTrace();
     }
+  }
+
+}
+class Node{
+  public int x;
+  public int y;
+  public Node(int x, int y){
+    this.x = x;
+    this.y = y;
   }
 }
